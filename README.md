@@ -1,6 +1,6 @@
-# 🎮 State-of-the-Art Tic Tac Toe
+# 🎮 Enhanced Tic Tac Toe - Modern Web Game
 
-A modern, beautifully designed Tic Tac Toe game built with Next.js 16, React 19, and TypeScript. Features an unbeatable AI opponent using Minimax algorithm, stunning glassmorphism UI, and smooth animations.
+A beautifully designed, feature-rich Tic Tac Toe game built with Next.js 16, React 19, and TypeScript. Features an unbeatable AI opponent, stunning glassmorphism UI, and smooth animations.
 
 ![Tic Tac Toe Game](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
 ![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
@@ -10,8 +10,9 @@ A modern, beautifully designed Tic Tac Toe game built with Next.js 16, React 19,
 ## ✨ Features
 
 ### 🎯 Game Modes
-- **Human vs Human** - Classic two-player mode
+- **Human vs Human** - Classic two-player mode with personalized names
 - **Human vs AI** - Play against an intelligent computer opponent
+- **Dynamic Name Generation** - Automatic funny names for both players and AI with adjective + noun combinations
 
 ### 🤖 AI Opponent
 - **Three Difficulty Levels**:
@@ -25,15 +26,17 @@ A modern, beautifully designed Tic Tac Toe game built with Next.js 16, React 19,
 - **Smooth Animations** - Powered by Framer Motion with spring physics
 - **Dark Theme** - Pure black background with purple/blue gradient accents
 - **Winner Celebration** - Animated confetti effect with rotating sparkles
+- **Animated Background**: Dynamic gradient animations
 
 ### 🎮 Interactive Elements
-- **Pop-in Animations** - X and O symbols spring into place
+- **Pop-in Animations** - X and O symbols spring into place with rotation
 - **Hover Effects** - Interactive feedback on all clickable elements
 - **AI Thinking Indicator** - Shows when computer is calculating its move
 - **Score Tracking** - Persistent score tracking for both players and draws
 - **Winning Line Highlight** - Visual emphasis on winning combinations
+- **Micro-interactions** - Spring physics on buttons and controls
 
-## 🚀 Quick Start
+### 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -52,7 +55,7 @@ A modern, beautifully designed Tic Tac Toe game built with Next.js 16, React 19,
    npm install
    ```
 
-3. **Start the development server**:
+3. **Start development server**:
    ```bash
    npm run dev
    ```
@@ -69,12 +72,10 @@ npm start
 
 ## 📚 Learn from This Project
 
-This project is perfect for developers wanting to learn modern web development concepts. Here's what you can learn:
-
 ### 🧠 AI & Algorithms
 
 #### Minimax Algorithm Implementation
-The AI uses the **Minimax algorithm** with **alpha-beta pruning** - a classic game theory algorithm:
+The AI uses **Minimax algorithm** with **alpha-beta pruning** - a classic game theory algorithm:
 
 ```typescript
 const minimax = (board: Board, depth: number, isMaximizing: boolean, alpha: number, beta: number): number => {
@@ -86,7 +87,7 @@ const minimax = (board: Board, depth: number, isMaximizing: boolean, alpha: numb
 
   // Recursive evaluation of all possible moves
   // with alpha-beta pruning for optimization
-}
+};
 ```
 
 **Key Concepts**:
@@ -96,8 +97,7 @@ const minimax = (board: Board, depth: number, isMaximizing: boolean, alpha: numb
 - **Alpha-Beta Pruning**: Cuts off branches that won't affect the outcome
 
 #### Smart Move Logic
-For easier difficulties, the AI uses strategic heuristics:
-
+For easier difficulties, AI uses strategic heuristics:
 1. **Win Move**: Check if AI can win in one move
 2. **Block Move**: Prevent player from winning
 3. **Center Control**: Take center square (most valuable)
@@ -146,7 +146,7 @@ backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl
 
 #### Responsive Design with Tailwind
 ```tsx
-className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+className="text-4xl sm:text-5xl md:text-6xl"
 ```
 
 **Mobile-First Approach**:
@@ -203,23 +203,26 @@ tic-tac-toe/
 
 ## 🎯 How to Play
 
-1. **Choose Game Mode**: Select "Human vs Human" or "Human vs AI"
-2. **Select Difficulty** (AI mode only): Choose Easy, Medium, or Grandmaster
-3. **Make Your Move**: Click any empty square to place your X
-4. **Win Conditions**: Get 3 in a row (horizontal, vertical, or diagonal)
-5. **Track Progress**: Monitor scores in the scoreboard above
+### 🎮 Game Flow
+1. **Mode Selection**: Choose between "Human vs Human" or "Human vs AI"
+2. **Name Input**: Enter your name or get random funny names (adaptive to mode)
+3. **Difficulty Selection**: Choose AI difficulty (Easy, Medium, Grandmaster)
+4. **Start Game**: Begin playing with personalized experience
+5. **Gameplay**: Take turns placing X's and O's
+6. **Win Conditions**: Get 3 in a row, column, or diagonal
+7. **Score Tracking**: Monitor wins, losses, and draws
 
 ### Strategy Tips
 
-**Against AI**:
-- **Grandmaster mode is unbeatable** - aim for a draw!
+#### Against AI**:
+- **Grandmaster mode is unbeatable** - Aim for a draw!
 - Try to control the center square early
 - Create multiple winning threats simultaneously
-- Block the AI's winning moves immediately
+- Block AI's winning moves immediately
 
-**For Beginners**:
+#### For Beginners**:
 - Start with Easy mode to understand the game
-- Watch how the AI blocks and creates threats
+- Watch how AI blocks and creates threats
 - Practice recognizing winning patterns
 
 ## 🚀 Deployment
@@ -250,7 +253,7 @@ CMD ["npm", "start"]
 
 ### Adding New Features
 
-**New Difficulty Level**:
+#### New Difficulty Level
 ```typescript
 type Difficulty = "easy" | "medium" | "hard" | "grandmaster";
 
@@ -260,7 +263,7 @@ case "hard":
   break;
 ```
 
-**Custom Themes**:
+#### Custom Themes
 ```css
 /* Add to globals.css */
 .theme-dark {
@@ -271,7 +274,7 @@ case "hard":
 }
 ```
 
-**Sound Effects**:
+#### Sound Effects
 ```typescript
 const playSound = (sound: string) => {
   const audio = new Audio(`/sounds/${sound}.mp3`);
