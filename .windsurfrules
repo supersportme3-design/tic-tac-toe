@@ -1,8 +1,3 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
 # Project Standards: AI Showcase (Next.js 16 + React 19/20)
 
 ## Tech Stack
@@ -15,7 +10,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 ## Coding Rules
 1. **App Router Only**: Never suggest or use the `pages/` directory.
 2. **Server Components**: Default to React Server Components (RSC) for data fetching. Only use `"use client"` when interactivity (hooks/Framer Motion) is required.
-3. **Clean UI**: Use a "State-of-the-art" aesthetic—minimalist, high-end typography, and subtle glows.
+3. **Clean UI**: Use a "State-of-the-art" aesthetic—minimalist, dark theme, high-end typography, and subtle glows.
 4. **No Legacy Hooks**: Since the React Compiler is active, do not suggest `useMemo` or `useCallback` for performance optimization.
 5. **Modern Icons**: Use `lucide-react` for any iconography.
 
