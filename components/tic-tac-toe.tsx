@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, RotateCcw, X, Circle, Sparkles, Brain, Users } from "lucide-react";
+import { Trophy, RotateCcw, X, Circle, Sparkles, Brain, Users, User, Shuffle } from "lucide-react";
 
 type Player = "X" | "O" | null;
 type Board = Player[];
@@ -20,6 +20,9 @@ const TicTacToe = () => {
   const [gameMode, setGameMode] = useState<GameMode>("pvp");
   const [difficulty, setDifficulty] = useState<Difficulty>("grandmaster");
   const [isAIThinking, setIsAIThinking] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [showNameInput, setShowNameInput] = useState(true);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const winningCombinations = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -225,6 +228,37 @@ const TicTacToe = () => {
     setIsAIThinking(false);
   };
 
+  const startNewGame = () => {
+    resetGame();
+    setGameStarted(true);
+  };
+
+  const funnyNames = [
+    "Sir Tick-a-Lot",
+    "Count Crossula",
+    "X-treme Gamer",
+    "Circle Master",
+    "Tic-Tac-Toe-Nator",
+    "The Crossinator",
+    "Captain O-Face",
+    "X-Wing Pilot",
+    "Circle-Jerk",
+    "Tic-Tac-Moe",
+    "Grandmaster X",
+    "Lord of the Rings",
+    "The X Factor",
+    "O-Mazing Player",
+    "Tic-Tac-Hero",
+    "Cross My Heart",
+    "O-Mega Player",
+    "X-Cellent Choice"
+  ];
+
+  const getRandomFunnyName = () => {
+    const randomName = funnyNames[Math.floor(Math.random() * funnyNames.length)];
+    setUserName(randomName);
+  };
+
   const resetScores = () => {
     setScores({ X: 0, O: 0, draws: 0 });
     resetGame();
@@ -235,7 +269,7 @@ const TicTacToe = () => {
     if (isDraw) return "It's a Draw!";
     if (isAIThinking) return "AI is thinking...";
     if (gameMode === "pve") {
-      return currentPlayer === "X" ? "Your Turn" : "AI's Turn";
+      return currentPlayer === "X" ? `${userName || "Your"} Turn` : "AI's Turn";
     }
     return `Player ${currentPlayer}'s Turn`;
   };
@@ -263,6 +297,58 @@ const TicTacToe = () => {
         >
           Tic Tac Toe
         </motion.h1>
+          
+          {/* Name Input Section */}
+          <AnimatePresence>
+            {showNameInput && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="mb-6 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-lg shadow-2xl"
+              >
+                <div className="text-center mb-4">
+                  <h2 className="text-xl font-semibold mb-2 text-purple-300">Enter Your Name</h2>
+                  <p className="text-sm text-gray-400 mb-4">Choose a name or get a random funny one!</p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  <input
+                    type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    placeholder="Enter your name..."
+                    className="flex-1 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white/15 transition-all"
+                    maxLength={20}
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={getRandomFunnyName}
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-purple-500/30 transition-all"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                    Random Name
+                  </motion.button>
+                </div>
+                
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => userName.trim() && startNewGame()}
+                  disabled={!userName.trim()}
+                  className={`w-full px-6 py-3 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 ${
+                    userName.trim() 
+                      ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:shadow-xl hover:shadow-purple-500/30" 
+                      : "bg-white/10 border border-white/20 text-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  <User className="w-5 h-5" />
+                  Start Game
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div className="text-lg sm:text-xl text-gray-300 mb-4">{getGameStatus()}</div>
           
           {/* Game Mode Selection */}
@@ -378,7 +464,9 @@ const TicTacToe = () => {
           <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md text-center shadow-lg shadow-purple-500/10">
             <div className="flex items-center justify-center gap-1 sm:gap-2 mb-2">
               <X className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
-              <span className="text-xs sm:text-sm text-gray-400">Player X</span>
+              <span className="text-xs sm:text-sm text-gray-400">
+                {gameMode === "pve" ? (userName || "Player X") : "Player X"}
+              </span>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-purple-400">{scores.X}</div>
           </div>
@@ -401,12 +489,15 @@ const TicTacToe = () => {
         </motion.div>
 
         {/* Game Board */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-lg shadow-2xl shadow-purple-500/5"
-        >
+        <AnimatePresence>
+          {gameStarted && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ delay: 0.2 }}
+              className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-lg shadow-2xl shadow-purple-500/5"
+            >
           {board.map((cell, index) => (
             <motion.button
               key={index}
@@ -449,32 +540,47 @@ const TicTacToe = () => {
             </motion.button>
           ))}
         </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Controls */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={resetGame}
-            className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 text-sm sm:text-base"
-          >
-            <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
-            New Game
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={resetScores}
-            className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-all duration-200 text-sm sm:text-base"
-          >
-            Reset Scores
-          </motion.button>
-        </motion.div>
+        <AnimatePresence>
+          {gameStarted && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={resetGame}
+                className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 text-sm sm:text-base"
+              >
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                New Game
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={startNewGame}
+                className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold flex items-center justify-center gap-2 hover:shadow-xl hover:shadow-green-500/30 transition-all duration-200 text-sm sm:text-base"
+              >
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+                Play Again
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={resetScores}
+                className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-all duration-200 text-sm sm:text-base"
+              >
+                Reset Scores
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       
       {/* Custom Styles */}
