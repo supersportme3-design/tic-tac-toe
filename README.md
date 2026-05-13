@@ -7,9 +7,30 @@ A beautifully designed, feature-rich Tic Tac Toe game built with Next.js 16, Rea
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css)
 
+## Version 2 — May 13, 2026
+
+**Release highlights**
+
+- **Quick play** — On the first screen, the **Quick play** button starts a match in one tap: **Human vs AI**, **Medium** difficulty, **3×3** board, and random fun names for you and the AI (the setup wizard is skipped). The button exposes a clear accessibility label so screen-reader users know it is Human vs AI, medium, on a three-by-three board. To pick another mode, board size, difficulty, or custom names, use the full wizard instead.
+- **Compared to the earlier live deploy** ([tictactoem.netlify.app](https://tictactoem.netlify.app/)): that build shows a minimal **Create Next App** shell and a single **Choose Game Mode** step only. This tree adds the full wizard (mode → size → difficulty → names), variable board sizes, settings (**Game** / **Sound** / **Appearance**), Web Audio move/UI sounds, board skins, and the quick-play shortcut above.
+
+**Git note — last commit vs this release**
+
+The latest commit referenced in docs is **`857bc7b`** (*“Update README.md with enhanced game features and current implementation status”*), which **only changed `README.md`**. Game and `lib/` updates are in the working tree until you commit and redeploy.
+
+**Function-level differences vs the last committed `components/tic-tac-toe.tsx` (`857bc7b`)**
+
+| Topic | Commit `857bc7b` (`tic-tac-toe.tsx`) | Version 2 (current sources) |
+|--------|--------------------------------------|-------------------------------|
+| Minimax | `minimax` as `useCallback` | Nested **`runMinimax`**; **`getAIMove`** uses it for grandmaster on 3×3 |
+| `useCallback` usage | **`minimax`**, **`getAIMove`** only | Adds **`getWinningCombinations`**, **`playSound`**, **`announceWinner`**, **`checkWinner`**, **`initializeBoard`**, tournament helpers, **`resetGame`**, **`changeBoardSize`**, **`startQuickPlay`**, … |
+| Randomness | Inline `Math.random()` | **`lib/tic-tac-toe-rng.ts`** (`randomChance`, `randomIndex`, …) |
+| Board & UI | Fixed 3×3-style flow | **`BoardSize`**, **`getWinningCombinations`**, settings sidebar, wizard, **Quick play** |
+
 ## ✨ Features
 
 ### 🎯 Game Modes
+- **Quick play** — Instantly start **Human vs AI**, **Medium** difficulty, **3×3** with random generated names (bypasses the setup wizard)
 - **Human vs Human** - Classic two-player mode with personalized names
 - **Human vs AI** - Play against an intelligent computer opponent
 - **Dynamic Name Generation** - Automatic funny names for both players and AI with adjective + noun combinations
@@ -27,6 +48,9 @@ A beautifully designed, feature-rich Tic Tac Toe game built with Next.js 16, Rea
 - **Dark Theme** - Pure black background with purple/blue gradient accents
 - **Winner Celebration** - Animated confetti effect with rotating sparkles
 - **Animated Background**: Dynamic gradient animations
+
+### 🔊 Audio
+- **Sound effects** - Optional move / win / draw / click tones via the Web Audio API (toggle under Settings → Sound)
 
 ### 🎮 Interactive Elements
 - **Pop-in Animations** - X and O symbols spring into place with rotation
@@ -178,10 +202,12 @@ tic-tac-toe/
 │   ├── layout.tsx           # Root layout component
 │   └── page.tsx             # Main page (renders game)
 ├── components/
-│   └── tic-tac-toe.tsx     # Main game component
+│   └── tic-tac-toe.tsx      # Main game component
+├── lib/
+│   └── tic-tac-toe-rng.ts   # Small RNG helpers (React Compiler–friendly)
 ├── public/                  # Static assets
-├── next.config.js          # Next.js configuration
-└── package.json            # Dependencies and scripts
+├── next.config.js           # Next.js configuration
+└── package.json             # Dependencies and scripts
 ```
 
 **Next.js 16 App Router**:
